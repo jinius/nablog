@@ -9,6 +9,11 @@ angular.module('nablogApp')
 		$scope.posts = data;
 	});
 
+	$scope.time = function(post) {
+		// TODO
+		return post.time || '1 hr';
+	};
+
 	$scope.removePost = function(post) {
 		if(! post) { return; }
 		Post.remove(post);
@@ -34,6 +39,10 @@ angular.module('nablogApp')
 	.then(function(data) {
 		$scope.post = data;
 	});
+
+	$scope.isMyPost = function() {
+		return true;
+	};
 
 	$scope.removePost = function() {
 		Post.remove($scope.post)

@@ -8,6 +8,7 @@ angular.module('nablogApp')
 		var token = {};
 		// TODO
 
+		token.tag = '1111';
 		token.publicKey = 'Dummy public key';
 		token.privateKey = 'Dummy private key';
 

@@ -1,18 +1,28 @@
-<div class="col-md-12">
+<div ng-include="'components/navbar/navbar.html'"></div>
+
 <article>
 	<header>
-		<h1>{{post.title}}</h1>
-		<img ng-click="facebook(post)" src="/assets/images/facebook.png" alt="Send to Facebook">
+		<div class="container">
+			<h1>{{post.title}}</h1>
+			<div class="pull-right">
+				<img ng-click="facebook(post)" src="/assets/images/facebook.png" alt="Send to Facebook">
+			</div>
+		</div>
 	</header>
-	<textarea ng-bind="post.content" readonly></textarea>
+	<div class="container">
+		<p>{{post.content}}</p>
+		<div class="btn-group pull-right" ng-show="isMyPost()">
+			<button type="button" class="btn btn-primary" ng-href="/edit">Edit</button>
+			<button type="button" class="btn btn-primary" ng-click="removePost()">Delete</button>
+		</div>
+	</div>
 	<footer>
-		<div>
+		<!-- div class="container">
 			<textarea ng-model="newComment" placeholder="Add comment"></textarea>
 			<button type="button">Add</button>
 		</div>
 		<div ng-repeat="comment in comments">
 			<p>{{comment.content}}</p>
-		</div>
+		</div -->
 	</footer>
 </article>
-</div>
