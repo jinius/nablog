@@ -6,7 +6,8 @@ describe('Controller: PostCtrl', function () {
 	beforeEach(module('nablogApp'));
 	beforeEach(module('Mockup'));
 
-	var postMockup = {};
+	var postMockup = {},
+		tokenMockup = {};
 
 	angular.module('Mockup', [])
 	.factory('Post', function($q) {
@@ -24,18 +25,36 @@ describe('Controller: PostCtrl', function () {
 				return $q.when(postMockup.remove(post));
 			}
 		};
+	})
+	.factory('Token', function() {
+		return {
+			createToken: function() {
+				return tokenMockup.create();
+			},
+			saveToken: function(token) {
+				return tokenMockup.save(token);
+			},
+			loadToken: function() {
+				return tokenMockup.load();
+			},
+			sign: function(data, token) {
+				return tokenMockup.sign(data, token);
+			}
+		};
 	});
 
 	var $controller,
 		scope,
 		root,
-		post;
+		post,
+		token;
 
-	beforeEach(inject(function (_$controller_, $rootScope, _Post_) {
+	beforeEach(inject(function (_$controller_, $rootScope, _Post_, _Token_) {
 		$controller = _$controller_;
 		scope = $rootScope.$new();
 		root = $rootScope;
 		post = _Post_;
+		token = _Token_;
 	}));
 
 	describe('Controller: PostCtrl', function () {
@@ -48,7 +67,8 @@ describe('Controller: PostCtrl', function () {
 
 			$controller('PostCtrl', {
 				$scope: scope,
-				Post: post
+				Post: post,
+				Token: token
 			});
 
 			root.$apply();
@@ -66,15 +86,33 @@ describe('Controller: PostCtrl', function () {
 				newPost = post;
 			};
 
+			tokenMockup.create = function() {
+				return {
+					key : "test",
+					tag : "test"
+				};
+			};
+
+			tokenMockup.load = function() {
+				return null;
+			};
+
+			tokenMockup.sign = function(token, data) {
+				return "testSign";
+			};
+
 			$controller('PostNewCtrl', {
 				$scope: scope,
 				$location: location,
-				Post: post
+				Post: post,
+				Token: token
 			});
 
 			scope.post = testPost;
 			scope.createPost();
-			expect(newPost).toEqual(testPost);
+			expect(newPost.title).toEqual(testPost.title);
+			expect(newPost.content).toEqual(testPost.content);
+			expect(newPost.signature).toEqual("testSign");
 		});
 	});
 
@@ -97,7 +135,8 @@ describe('Controller: PostCtrl', function () {
 				$scope: scope,
 				$location: location,
 				$routeParams: routeParams,
-				Post: post
+				Post: post,
+				Token: token
 			});
 
 			root.$apply();

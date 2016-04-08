@@ -6,11 +6,9 @@ angular.module('nablogApp')
 
 	service.createToken = function() {
 		var token = {};
-		// TODO
 
-		token.tag = '1111';
-		token.publicKey = 'Dummy public key';
-		token.privateKey = 'Dummy private key';
+		token.key = CryptoJS.lib.WordArray.random(128/8).toString();
+		token.tag = token.key.slice(0,4);
 
 		return token;
 	};
@@ -23,9 +21,9 @@ angular.module('nablogApp')
 		return angular.fromJson($window.localStorage.getItem('TokenStorage'));
 	};
 
-	service.sign = function(data, token) {
-		// TODO
-		return angular.toJson(data) + angular.toJson(token);
+	service.sign = function(token, data) {
+		data = (typeof data === 'string') ? data : angular.toJson(data);
+		return CryptoJS.SHA256(token + data).toString();
 	};
 
 	return service;

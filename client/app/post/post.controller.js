@@ -19,10 +19,13 @@ angular.module('nablogApp')
 		Post.remove(post);
 	};
 })
-.controller('PostNewCtrl', function($scope, $location, Post) {
+.controller('PostNewCtrl', function($scope, $location, Post, Token) {
 	$scope.post = {};
 	$scope.createPost = function() {
-		Post.create($scope.post)
+		var post = $scope.post;
+		var token = Token.loadToken() || Token.createToken();
+		post.signature = Token.sign(Token.loadToken(), post);
+		Post.create(post)
 		.then(function() {
 			$location.path('/post');
 		});
